@@ -1,14 +1,8 @@
 import _ from "lodash";
-import { BenchmarkDataWithId } from "./types";
+import { BenchmarkDataWithId } from "../types";
+import { stdev } from "../util";
 
-const stdev = (data: number[]) => {
-  const mean = _.mean(data);
-  const sum = _.sum(data.map((d) => (d - mean) ** 2));
-
-  return Math.sqrt(sum / data.length);
-};
-
-export const tc_merged_y_time_x_optim_graph_data = async () => {
+export const tcRelSpeedupMerged = async () => {
   const res = await fetch("http://localhost:3000/data");
   const data = (await res.json()) as BenchmarkDataWithId[];
 
@@ -57,6 +51,11 @@ export const tc_merged_y_time_x_optim_graph_data = async () => {
       {
         x: optimData.map((d) => d.optim),
         y: optimData.map((d) => d.mean),
+        error_y: {
+          type: "data",
+          array: optimData.map((d) => d.stdev),
+          visible: true,
+        },
         type: "scatter",
       },
     ],
@@ -65,7 +64,7 @@ export const tc_merged_y_time_x_optim_graph_data = async () => {
       title: {
         text: "Average speedup of AST optimisations (type-check phase)",
       },
-      xaxis: { title: "AST optimisation" },
+      xaxis: { title: "optimisation" },
       yaxis: {
         title: "Relative speedup",
       },

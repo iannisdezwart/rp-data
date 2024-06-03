@@ -66,12 +66,32 @@ const platforms: {
   },
 };
 
-const optimConsts: { [k: string]: number } = {
-  None: 1.0,
-  "Optim 1": 0.9,
-  "Optim 2": 0.77,
-  "Optim 3": 0.73,
-  "Optim 4": 0.55,
+const optimConsts: { [opt: string]: { [pl: string]: number } } = {
+  None: {
+    "Intel Xeon E5-2630 v4": 1.0,
+    "Apple M2 Pro 12-core": 1.0,
+    "AMD Ryzen XXX": 1.0,
+  },
+  "Optim 1": {
+    "Intel Xeon E5-2630 v4": 0.9,
+    "Apple M2 Pro 12-core": 0.83,
+    "AMD Ryzen XXX": 0.94,
+  },
+  "Optim 2": {
+    "Intel Xeon E5-2630 v4": 0.77,
+    "Apple M2 Pro 12-core": 0.67,
+    "AMD Ryzen XXX": 0.78,
+  },
+  "Optim 3": {
+    "Intel Xeon E5-2630 v4": 0.73,
+    "Apple M2 Pro 12-core": 0.69,
+    "AMD Ryzen XXX": 0.65,
+  },
+  "Optim 4": {
+    "Intel Xeon E5-2630 v4": 0.65,
+    "Apple M2 Pro 12-core": 0.48,
+    "AMD Ryzen XXX": 0.62,
+  },
 };
 
 for (const pl in platforms) {
@@ -83,7 +103,7 @@ for (const pl in platforms) {
 
     for (const optim in optimConsts) {
       const optimisations = optim;
-      const factor = optimConsts[optim];
+      const factor = optimConsts[optim][pl];
 
       for (const _ of Array(10)) {
         const tcVar = Math.random() * 0.2 - 0.1;

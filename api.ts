@@ -1,6 +1,9 @@
 import express from "express";
 import pg from "pg";
-import { tc_merged_y_time_x_optim_graph_data } from "./tc-merged-y-time-x-optim-graph-data";
+import { tcRelSpeedupByMachine } from "./graphs/tc-rel-speedup-by-machine";
+import {
+  tcRelSpeedupMerged
+} from "./graphs/tc-rel-speedup-merged";
 
 const dbPool = new pg.Pool({
   user: "postgres",
@@ -94,7 +97,8 @@ app.delete("/data", async (req, res) => {
 
 app.get("/chart/:id", async (req, res) => {
   const chartGenerators: any = {
-    "tc-merged-y-time-x-optime-graph": tc_merged_y_time_x_optim_graph_data,
+    "tc-merged-rel-speedup": tcRelSpeedupMerged,
+    "tc-rel-speedup-by-machine": tcRelSpeedupByMachine,
   };
 
   const chartId = req.params.id;
