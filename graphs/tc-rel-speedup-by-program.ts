@@ -68,11 +68,11 @@ export const tcRelSpeedupByProgram = async () => {
     layout: {
       font: { family: "serif" },
       title: {
-        text: "Average speedup of AST optimisations (type-check phase) by machine",
+        text: "Average speedup of AST optimisations (type-check phase) by program",
       },
       xaxis: {
         title: {
-          text: "Machine",
+          text: "Optimisation",
         },
       },
       yaxis: {

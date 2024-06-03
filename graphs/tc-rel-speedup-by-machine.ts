@@ -72,7 +72,7 @@ export const tcRelSpeedupByMachine = async () => {
       },
       xaxis: {
         title: {
-          text: "Machine",
+          text: "Optimisation",
         },
       },
       yaxis: {

@@ -66,9 +66,15 @@ export const tcRelSpeedupMerged = async () => {
       title: {
         text: "Average speedup of AST optimisations (type-check phase)",
       },
-      xaxis: { title: "optimisation" },
+      xaxis: {
+        title: {
+          text: "Optimisation",
+        },
+      },
       yaxis: {
-        title: "Relative speedup",
+        title: {
+          text: "Relative speedup",
+        },
       },
     },
   };

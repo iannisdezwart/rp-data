@@ -1,10 +1,10 @@
 import express from "express";
 import pg from "pg";
 import { tcRelSpeedupByMachine } from "./graphs/tc-rel-speedup-by-machine";
+import { tcRelSpeedupByProgram } from "./graphs/tc-rel-speedup-by-program";
 import {
   tcRelSpeedupMerged
 } from "./graphs/tc-rel-speedup-merged";
-import { tcRelSpeedupByProgram } from "./graphs/tc-rel-speedup-by-program";
 
 const dbPool = new pg.Pool({
   user: "postgres",
@@ -98,7 +98,7 @@ app.delete("/data", async (req, res) => {
 
 app.get("/chart/:id", async (req, res) => {
   const chartGenerators: any = {
-    "tc-merged-rel-speedup": tcRelSpeedupMerged,
+    "tc-rel-speedup-merged": tcRelSpeedupMerged,
     "tc-rel-speedup-by-machine": tcRelSpeedupByMachine,
     "tc-rel-speedup-by-program": tcRelSpeedupByProgram,
   };
