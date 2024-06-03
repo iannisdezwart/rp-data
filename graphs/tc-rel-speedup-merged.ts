@@ -37,14 +37,16 @@ export const tcRelSpeedupMerged = async () => {
   // Group by optimisation. We can then calculate the mean and
   // standard deviation of the speedup for each optimisation.
   const grouped = _.groupBy(speedups, (d) => d.optimisations);
-  const optimData = Object.entries(grouped).map(([key, group]) => {
-    const speedups = group.map((d) => d.speedup);
-    return {
-      optim: key,
-      mean: _.mean(speedups),
-      stdev: stdev(speedups),
-    };
-  });
+  const optimData = Object.entries(grouped)
+    .map(([key, group]) => {
+      const speedups = group.map((d) => d.speedup);
+      return {
+        optim: key,
+        mean: _.mean(speedups),
+        stdev: stdev(speedups),
+      };
+    })
+    .sort((a, b) => a.optim.localeCompare(b.optim));
 
   return {
     data: [

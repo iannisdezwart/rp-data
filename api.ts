@@ -4,6 +4,7 @@ import { tcRelSpeedupByMachine } from "./graphs/tc-rel-speedup-by-machine";
 import {
   tcRelSpeedupMerged
 } from "./graphs/tc-rel-speedup-merged";
+import { tcRelSpeedupByProgram } from "./graphs/tc-rel-speedup-by-program";
 
 const dbPool = new pg.Pool({
   user: "postgres",
@@ -99,6 +100,7 @@ app.get("/chart/:id", async (req, res) => {
   const chartGenerators: any = {
     "tc-merged-rel-speedup": tcRelSpeedupMerged,
     "tc-rel-speedup-by-machine": tcRelSpeedupByMachine,
+    "tc-rel-speedup-by-program": tcRelSpeedupByProgram,
   };
 
   const chartId = req.params.id;
