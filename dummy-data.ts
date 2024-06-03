@@ -66,31 +66,35 @@ const platforms: {
   },
 };
 
-const optimConsts: { [opt: string]: { [pl: string]: number } } = {
+const optimConsts: {
+  [opt: string]: {
+    [pl: string]: { tc: number; cg: number };
+  };
+} = {
   None: {
-    "Intel Xeon E5-2630 v4": 1.0,
-    "Apple M2 Pro 12-core": 1.0,
-    "AMD Ryzen XXX": 1.0,
+    "Intel Xeon E5-2630 v4": { tc: 1.0, cg: 1.0 },
+    "Apple M2 Pro 12-core": { tc: 1.0, cg: 1.0 },
+    "AMD Ryzen XXX": { tc: 1.0, cg: 1.0 },
   },
   "Optim 1": {
-    "Intel Xeon E5-2630 v4": 0.9,
-    "Apple M2 Pro 12-core": 0.83,
-    "AMD Ryzen XXX": 0.94,
+    "Intel Xeon E5-2630 v4": { tc: 0.9, cg: 0.93 },
+    "Apple M2 Pro 12-core": { tc: 0.83, cg: 0.87 },
+    "AMD Ryzen XXX": { tc: 0.94, cg: 0.94 },
   },
   "Optim 2": {
-    "Intel Xeon E5-2630 v4": 0.77,
-    "Apple M2 Pro 12-core": 0.67,
-    "AMD Ryzen XXX": 0.78,
+    "Intel Xeon E5-2630 v4": { tc: 0.77, cg: 0.81 },
+    "Apple M2 Pro 12-core": { tc: 0.67, cg: 0.75 },
+    "AMD Ryzen XXX": { tc: 0.78, cg: 0.8 },
   },
   "Optim 3": {
-    "Intel Xeon E5-2630 v4": 0.73,
-    "Apple M2 Pro 12-core": 0.69,
-    "AMD Ryzen XXX": 0.65,
+    "Intel Xeon E5-2630 v4": { tc: 0.73, cg: 0.81 },
+    "Apple M2 Pro 12-core": { tc: 0.69, cg: 0.74 },
+    "AMD Ryzen XXX": { tc: 0.65, cg: 0.78 },
   },
   "Optim 4": {
-    "Intel Xeon E5-2630 v4": 0.65,
-    "Apple M2 Pro 12-core": 0.48,
-    "AMD Ryzen XXX": 0.62,
+    "Intel Xeon E5-2630 v4": { tc: 0.65, cg: 0.77 },
+    "Apple M2 Pro 12-core": { tc: 0.48, cg: 0.71 },
+    "AMD Ryzen XXX": { tc: 0.62, cg: 0.76 },
   },
 };
 
@@ -110,8 +114,8 @@ for (const pl in platforms) {
         const cgVar = Math.random() * 0.2 - 0.1;
 
         addData({
-          tc: data.tc * (factor + tcVar),
-          cg: data.cg * (factor + cgVar),
+          tc: data.tc * (factor.tc + tcVar),
+          cg: data.cg * (factor.cg + cgVar),
           program,
           platform,
           optimisations,

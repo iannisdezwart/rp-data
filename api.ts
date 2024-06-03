@@ -1,5 +1,8 @@
 import express from "express";
 import pg from "pg";
+import { cgRelSpeedupByMachine } from "./graphs/cg-rel-speedup-by-machine";
+import { cgRelSpeedupByProgram } from "./graphs/cg-rel-speedup-by-program";
+import { cgRelSpeedupMerged } from "./graphs/cg-rel-speedup-merged";
 import { tcRelSpeedupByMachine } from "./graphs/tc-rel-speedup-by-machine";
 import { tcRelSpeedupByProgram } from "./graphs/tc-rel-speedup-by-program";
 import {
@@ -101,6 +104,9 @@ app.get("/chart/:id", async (req, res) => {
     "tc-rel-speedup-merged": tcRelSpeedupMerged,
     "tc-rel-speedup-by-machine": tcRelSpeedupByMachine,
     "tc-rel-speedup-by-program": tcRelSpeedupByProgram,
+    "cg-rel-speedup-merged": cgRelSpeedupMerged,
+    "cg-rel-speedup-by-machine": cgRelSpeedupByMachine,
+    "cg-rel-speedup-by-program": cgRelSpeedupByProgram,
   };
 
   const chartId = req.params.id;
