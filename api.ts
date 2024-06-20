@@ -1,13 +1,13 @@
 import express from "express";
 import pg from "pg";
+import { cacheGraph } from "./graphs/cache-graph";
 import { cgRelSpeedupByMachine } from "./graphs/cg-rel-speedup-by-machine";
 import { cgRelSpeedupByProgram } from "./graphs/cg-rel-speedup-by-program";
 import { cgRelSpeedupMerged } from "./graphs/cg-rel-speedup-merged";
+import { memoryGraph } from "./graphs/memory-graph";
 import { tcRelSpeedupByMachine } from "./graphs/tc-rel-speedup-by-machine";
 import { tcRelSpeedupByProgram } from "./graphs/tc-rel-speedup-by-program";
-import {
-  tcRelSpeedupMerged
-} from "./graphs/tc-rel-speedup-merged";
+import { tcRelSpeedupMerged } from "./graphs/tc-rel-speedup-merged";
 
 const dbPool = new pg.Pool({
   user: "postgres",
@@ -107,6 +107,10 @@ app.get("/chart/:id", async (req, res) => {
     "cg-rel-speedup-merged": cgRelSpeedupMerged,
     "cg-rel-speedup-by-machine": cgRelSpeedupByMachine,
     "cg-rel-speedup-by-program": cgRelSpeedupByProgram,
+    "ast-memory": memoryGraph,
+    "cache-d1": cacheGraph("d1"),
+    "cache-lld": cacheGraph("lld"),
+    "cache-ll": cacheGraph("ll"),
   };
 
   const chartId = req.params.id;

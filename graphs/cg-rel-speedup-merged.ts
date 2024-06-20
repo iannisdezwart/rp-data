@@ -2,17 +2,25 @@ import _ from "lodash";
 import { BenchmarkDataWithId } from "../types";
 import { stdev } from "../util";
 
+const optimOrder = [
+  "none",
+  "compact-token",
+  "class-ids",
+  "compact-type",
+  "struct-of-arrays",
+];
+
 export const cgRelSpeedupMerged = async () => {
   const res = await fetch("http://localhost:3000/data");
   const data = (await res.json()) as BenchmarkDataWithId[];
 
   // Each combination of platform and program has a baseline,
-  // which is the mean of the data points with optimisation "None".
+  // which is the mean of the data points with optimisation "none".
   const baselines = Object.entries(
     _.groupBy(data, (d) => `${d.platform}-${d.program}`)
   ).map(([key, group]) => {
     const baseline = _.meanBy(
-      group.filter((d) => d.optimisations === "None"),
+      group.filter((d) => d.optimisations === "none"),
       (d) => d.cg
     );
     return { key, baseline };
@@ -46,7 +54,7 @@ export const cgRelSpeedupMerged = async () => {
         stdev: stdev(speedups),
       };
     })
-    .sort((a, b) => a.optim.localeCompare(b.optim));
+    .sort((a, b) => optimOrder.indexOf(a.optim) - optimOrder.indexOf(b.optim));
 
   return {
     data: [
@@ -58,7 +66,7 @@ export const cgRelSpeedupMerged = async () => {
           array: optimData.map((d) => d.stdev),
           visible: true,
         },
-        type: "scatter",
+        type: "bar",
       },
     ],
     layout: {
@@ -72,6 +80,7 @@ export const cgRelSpeedupMerged = async () => {
         },
       },
       yaxis: {
+        type: "log",
         title: {
           text: "Relative speedup",
         },
