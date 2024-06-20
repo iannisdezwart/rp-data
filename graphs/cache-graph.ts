@@ -1,6 +1,7 @@
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import _ from "lodash";
+import { stdev } from "../util";
 
 const optimOrder = [
   "none",
@@ -72,18 +73,60 @@ export const cacheGraph = (cacheLevel: string) => () =>
           );
       });
 
+      // Just group by optimisation, combine the data for all programs
+
+      const data = Object.entries(_.groupBy(results, (d) => d.opt)).map(
+        ([optim, optimData]) => {
+          const d1MissRates = optimData.map((d) => d.d1MissRate);
+          const lldMissRates = optimData.map((d) => d.lldMissRate);
+          const llMissRates = optimData.map((d) => d.llMissRate);
+          return {
+            optim,
+            d1MissRate: _.mean(d1MissRates),
+            d1StdDev: stdev(d1MissRates),
+            lldMissRate: _.mean(lldMissRates),
+            lldStdDev: stdev(lldMissRates),
+            llMissRate: _.mean(llMissRates),
+            llStdDev: stdev(llMissRates),
+          };
+        }
+      );
+
       resolve({
-        data: dataByProgram.map((d) => ({
-          x: d.map((d) => d.optim),
-          y: d.map((d) => {
-            if (cacheLevel === "d1") return d.d1MissRate;
-            if (cacheLevel === "lld") return d.lldMissRate;
-            if (cacheLevel === "ll") return d.llMissRate;
-            throw new Error(`Invalid cache level: ${cacheLevel}`);
+        data: dataByProgram
+          .map((d) => ({
+            x: d.map((d) => d.optim),
+            y: d.map((d) => {
+              if (cacheLevel === "d1") return d.d1MissRate;
+              if (cacheLevel === "lld") return d.lldMissRate;
+              if (cacheLevel === "ll") return d.llMissRate;
+              throw new Error(`Invalid cache level: ${cacheLevel}`);
+            }),
+            error_y: {},
+            type: "bar",
+            name: d[0].program,
+          }))
+          .concat({
+            x: data.map((d) => d.optim),
+            y: data.map((d) => {
+              if (cacheLevel === "d1") return d.d1MissRate;
+              if (cacheLevel === "lld") return d.lldMissRate;
+              if (cacheLevel === "ll") return d.llMissRate;
+              throw new Error(`Invalid cache level: ${cacheLevel}`);
+            }),
+            error_y: {
+              type: "data",
+              array: data.map((d) => {
+                if (cacheLevel === "d1") return d.d1StdDev;
+                if (cacheLevel === "lld") return d.lldStdDev;
+                if (cacheLevel === "ll") return d.llStdDev;
+                throw new Error(`Invalid cache level: ${cacheLevel}`);
+              }),
+              visible: true,
+            },
+            type: "bar",
+            name: "average",
           }),
-          type: "bar",
-          name: d[0].program,
-        })),
         layout: {
           font: { family: "serif" },
           title: {
